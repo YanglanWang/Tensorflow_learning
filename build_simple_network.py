@@ -1,7 +1,7 @@
 from __future__ import print_function
 import tensorflow as tf
 import numpy as np
-
+import matplotlib.pyplot as plt
 def add_layer(inputs,in_size, out_size, activation_function=None):
     Weights=tf.Variable(tf.random_normal([in_size,out_size]))
     biases=tf.Variable(tf.zeros([1,out_size])+0.1)
@@ -26,7 +26,34 @@ train_step=tf.train.GradientDescentOptimizer(0.1).minimize(loss)
 init=tf.global_variables_initializer()
 sess=tf.Session()
 sess.run(init)
+# for i in range(1000):
+#     sess.run(train_step,feed_dict={ys:y_data,xs:x_data})
+#     if i%50==0:
+#         print(sess.run(loss,feed_dict={ys:y_data,xs:x_data}))
+
+
+# plot the real data
+fig = plt.figure()
+ax = fig.add_subplot(1,1,1)
+ax.scatter(x_data, y_data)
+plt.ion()#本次运行请注释，全局运行不要注释
+plt.show()
+
+
+
+
 for i in range(1000):
-    sess.run(train_step,feed_dict={ys:y_data,xs:x_data})
-    if i%50==0:
+    # training
+    sess.run(train_step, feed_dict={xs: x_data, ys: y_data})
+    if i % 50 == 0:
+        # to visualize the result and improvement
+        try:
+            ax.lines.remove(lines[0])
+        except Exception:
+            pass
         print(sess.run(loss,feed_dict={ys:y_data,xs:x_data}))
+        prediction_value = sess.run(prediction, feed_dict={xs: x_data})
+        # plot the prediction
+        lines = ax.plot(x_data, prediction_value, 'r-', lw=5)
+        plt.pause(1)
+
