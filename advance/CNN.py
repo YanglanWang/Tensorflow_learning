@@ -25,7 +25,8 @@ def conv2d(x,W):
 def max_pool_2x2(x):
     return tf.nn.max_pool(x,ksize=[1,2,2,1],strides=[1,2,2,1],padding='SAME')
 
-xs=tf.placeholder(tf.float32,[None,784])/255.
+xs=tf.placeholder(tf.float32,[None,784])
+# xs=tf.placeholder(tf.float32,[None,784])/255.
 ys=tf.placeholder(tf.float32,[None,10])
 keep_prob=tf.placeholder(tf.float32)
 x_image=tf.reshape(xs,[-1,28,28,1])
