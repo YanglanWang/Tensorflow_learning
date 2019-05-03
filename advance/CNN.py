@@ -12,7 +12,7 @@ def compute_accuracy(v_xs,v_ys):
     return result
 
 def weight_variable(shape):
-    initial=tf.constant(0.1,shape=shape)
+    initial=tf.truncated_normal(shape,stddev=0.1)
     return tf.Variable(initial)
 
 def bias_variable(shape):
@@ -63,3 +63,4 @@ for i in range(1000):
     sess.run(train_step,feed_dict={xs:batch_xs,ys:batch_ys,keep_prob:0.5})
     if i%50==0:
         print(compute_accuracy(mnist.test.images[:1000],mnist.test.labels[:1000]))
+
