@@ -21,7 +21,7 @@ def compute_accuracy(v_xs, v_ys):
     result = sess.run(accuracy, feed_dict={xs: v_xs, ys: v_ys})
     return result
 
-xs=tf.placehold(tf.float32,[None,784])
+xs=tf.placeholder(tf.float32,[None,784])
 ys=tf.placeholder(tf.float32,[None,10])
 prediction=add_layer(xs,784,10,activation_function=tf.nn.softmax)
 
