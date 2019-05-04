@@ -2,7 +2,7 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 import numpy as np
 from tensorflow.examples.tutorials.mnist import input_data
-mnist=input_data.read_data_sets("/tmp/data/",one_hot=False)
+mnist=input_data.read_data_sets("MNIST_data",one_hot=False)
 #parameter
 learning_rate=0.01
 training_epochs=5
@@ -17,7 +17,7 @@ weights={
     'encoder_h1':tf.Variable(tf.random_normal([n_input,n_hidden_1])),
     'encoder_h2':tf.Variable(tf.random_normal([n_hidden_1,n_hidden_2])),
     'decoder_h1':tf.Variable(tf.random_normal([n_hidden_2,n_hidden_1])),
-    'decoder_h2':tf.Variable(tf.random_normal([n_hidden_2,n_input]))
+    'decoder_h2':tf.Variable(tf.random_normal([n_hidden_1,n_input]))
 }
 biases={
     'encoder_b1': tf.Variable(tf.random_normal([n_hidden_1])),
@@ -40,7 +40,7 @@ decoder_op=decoder(encoder_op)
 y_pred=decoder_op
 y_true=X
 
-cost=tf.reduce__mean(tf.pow(y_true-y_pred,2))
+cost=tf.reduce_mean(tf.pow(y_true-y_pred,2))
 optimizer=tf.train.AdamOptimizer(learning_rate).minimize(cost)
 
 with tf.Session() as sess:
@@ -58,7 +58,3 @@ with tf.Session() as sess:
         a[1][i].imshow(np.reshape(encode_decode[i],(28,28)))
     plt.show()
 
-    encoder_result=sess.run(encoder_op,feed_dict={X:mnist.test.images})
-    plt.scatter(encoder_result[:,0],encoder_result[:,1],c=mnist.test.labels)
-    plt.colorbar()
-    plt.show()
