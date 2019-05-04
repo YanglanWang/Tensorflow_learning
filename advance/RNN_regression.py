@@ -18,7 +18,7 @@ def get_batch():
     BATCH_START+=TIME_STEPS
     return [seq[:,:,np.newaxis],res[:,:,np.newaxis],xs]
 
-def LSTMRNN(object):
+class LSTMRNN(object):
     def __init__(self,n_steps,input_size,output_size,cell_size,batch_size):
         self.n_steps=n_steps
         self.input_size=input_size
@@ -77,8 +77,8 @@ def LSTMRNN(object):
             tf.summary.scalar('cost',self.cost)
 
 
-    def ms_error(self,y_target,y_pre):
-        return tf.square(tf.sub(y_target,y_pre))
+    def ms_error(self,labels,logits):
+        return tf.square(tf.subtract(labels,logits))
 
     def _weight_variable(self,shape,name='weights'):
         initializer=tf.random_normal_initializer(mean=0,stddev=1.)
@@ -91,6 +91,8 @@ def LSTMRNN(object):
 if __name__=='__main__':
     model=LSTMRNN(TIME_STEPS,INPUT_SIZE,OUTPUT_SIZE,CELL_SIZE,BATCH_SIZE)
     sess=tf.Session()
+    merged=tf.summary.merge_all()
+    writer=tf.summary.FileWriter('logs',sess.graph)
     sess.run(tf.global_variables_initializer())
 
     for i in range(200):
@@ -110,5 +112,12 @@ if __name__=='__main__':
             [model.train_op,model.cost,model.cell_final_state,model.pred],
             feed_dict=feed_dict
         )
+        plt.plot(xs[0,:],res[0].flatten(),'r',xs[0,:],pred.flatten()[:TIME_STEPS],'b--')
+        plt.ylim(-1.2,1.2)
+        plt.draw()
+        plt.pause(0.3)
+
         if i%20==0:
             print('cost:',round(cost,4))
+            result=sess.run(merged,feed_dict)
+            writer.add_summary(result,i)
