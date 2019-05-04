@@ -6,10 +6,11 @@ mnist=input_data.read_data_sets('MNIST_data',one_hot=True)
 
 lr=0.001
 training_iters=100000
-batch_size=128
 
-n_inputs=28
+batch_size=128
 n_steps=28
+n_inputs=28
+
 n_hidden_units=128
 n_classes=10
 
@@ -27,6 +28,7 @@ def RNN(X,weights,biases):
     X=tf.reshape(X,[-1,n_inputs])
     X_in=tf.matmul(X,weights['in'])+biases['in']
     X_in=tf.reshape(X_in,[-1,n_steps,n_hidden_units])
+
     cell=tf.nn.rnn_cell.BasicLSTMCell(n_hidden_units,forget_bias=1.0,state_is_tuple=True)
     init_state=cell.zero_state(batch_size,dtype=tf.float32)
     outputs,final_state=tf.nn.dynamic_rnn(cell,X_in,initial_state=init_state,time_major=False)
