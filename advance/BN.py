@@ -2,7 +2,9 @@ import numpy as np
 import tensorflow as tf
 import matplotlib.pyplot as plt
 
-ACTIVATION=tf.nn.relu
+# ACTIVATION=tf.nn.relu
+ACTIVATION=tf.nn.tanh
+
 N_LAYERS=7
 N_HIDDEN_UNITS=30
 
@@ -51,6 +53,10 @@ def built_net(xs,ys,norm):
                     return tf.identity(fc_mean),tf.identity(fc_var)
             mean,var=mean_var_with_update()
             Wx_plus_b=tf.nn.batch_normalization(Wx_plus_b,mean,var,shift,scale,epsilon)
+            # 上面那一步, 在做如下事情:
+            # Wx_plus_b = (Wx_plus_b - fc_mean) / tf.sqrt(fc_var + 0.001)
+            # Wx_plus_b = Wx_plus_b * scale + shift
+            # 如果你已经看不懂了, 请去我最上面学习资料里的链接 (我制作的 Batch normalization 简介视频)
         if activation_function is None:
             outputs=Wx_plus_b
         else:
