@@ -8,6 +8,7 @@ REAL_PARAMS=[1.2,2.5]
 INIT_PARAMS=[[5,4],
              [5,1],
              [2,4.5]][2]
+#[2]can be edited into 0,1,or 2
 
 x=np.linspace(-1,1,200,dtype=np.float32)
 y_fun=lambda a,b:np.sin(b*np.cos(a*x))
